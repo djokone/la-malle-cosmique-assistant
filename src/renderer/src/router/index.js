@@ -1,7 +1,7 @@
-import BaseAdminLayout from '../templates/BaseAdminLayout.vue'
+import BaseAdminLayout from '../templates/baseAdminLayout.vue'
 import LeftBar from '../components/VerticalMenu.vue'
 import SimpleLayout from '../templates/SimpleLayout.vue'
-import Settings from '../pages/Settings.vue'
+import Settings from '../pages/settings.vue'
 
 export default [
     {
@@ -14,7 +14,7 @@ export default [
                 LeftBar,
                 default: SimpleLayout
             },
-            children: [
+        children: [
                 {
                     path: '',
                     component: Settings

@@ -6,23 +6,23 @@ import configManager from './configManager'
 import path from 'path'
 import fs from 'fs'
 
-const loadIpcHandlers = async () => {
-  const ipcDirectory = path.join(__dirname, 'ipc')
-  // Lisez tous les fichiers du dossier ipc
-  const files = fs.readdirSync(ipcDirectory)
-  for (const file of files) {
-    if (file.endsWith('.js')) {
-      const modulePath = path.join(ipcDirectory, file)
-      // Importez chaque module IPC dynamiquement
-      try {
-        const module = await import(`file://${modulePath}`)
-        module.default(); // Exécutez la fonction d'enregistrement exportée par défaut
-      } catch (e) {
-        console.error(`Échec du chargement du module IPC ${file}:`, e)
-      }
-    }
-  }
-}
+// const loadIpcHandlers = async () => {
+//   const ipcDirectory = path.join(__dirname, 'ipc')
+//   // Lisez tous les fichiers du dossier ipc
+//   const files = fs.readdirSync(ipcDirectory)
+//   for (const file of files) {
+//     if (file.endsWith('.js')) {
+//       const modulePath = path.join(ipcDirectory, file)
+//       // Importez chaque module IPC dynamiquement
+//       try {
+//         const module = await import(`file://${modulePath}`)
+//         module.default(); // Exécutez la fonction d'enregistrement exportée par défaut
+//       } catch (e) {
+//         console.error(`Échec du chargement du module IPC ${file}:`, e)
+//       }
+//     }
+//   }
+// }
 
 function createWindow() {
   ipcMain.handle('getConfig', async (event, key) => {
@@ -78,7 +78,7 @@ app.whenReady().then(async () => {
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
   })
-  await loadIpcHandlers();
+  // await loadIpcHandlers();
   createWindow()
 
   app.on('activate', function () {
