@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  name: 'settings',
+  name: 'Settings',
   data() {
     return {
       form: {
@@ -20,17 +20,17 @@ export default {
       }
     }
   },
+  async created() {
+    this.form.apiKey = (await this.$electron.ipcRenderer.invoke('getConfig', 'googleApiKey')) || ''
+    this.form.apiSecret =
+      (await this.$electron.ipcRenderer.invoke('getConfig', 'googleApiSecret')) || ''
+  },
   methods: {
     async saveApiCredentials() {
       await this.$electron.ipcRenderer.invoke('setConfig', 'googleApiKey', this.form.apiKey)
       await this.$electron.ipcRenderer.invoke('setConfig', 'googleApiSecret', this.form.apiSecret)
       console.log('save successfully')
     }
-  },
-  async created() {
-    this.form.apiKey = (await this.$electron.ipcRenderer.invoke('getConfig', 'googleApiKey')) || ''
-    this.form.apiSecret =
-      (await this.$electron.ipcRenderer.invoke('getConfig', 'googleApiSecret')) || ''
   }
 }
 </script>

@@ -45,6 +45,10 @@ h1 {
 .root-container {
   height: 100vh;
 }
+.vertical-menu {
+  width: 200px;
+  height: 100vh;
+}
 
 @media (prefers-color-scheme: light) {
   :root {
