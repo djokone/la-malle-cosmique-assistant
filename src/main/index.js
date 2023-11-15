@@ -1,29 +1,39 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
-import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import configManager from './configManager'
 import path from 'path'
-import fs from 'fs'
+import googleAuthIpc from './ipc/googleAuthIpc.js'
+import sheetsIpc from './ipc/sheetsIpc.js'
+import imagesIpc from "./ipc/imagesIpc.js";
+import sourcesIpc from "./ipc/sourcesIpc.js";
 
-// const loadIpcHandlers = async () => {
-//   const ipcDirectory = path.join(__dirname, 'ipc')
-//   // Lisez tous les fichiers du dossier ipc
-//   const files = fs.readdirSync(ipcDirectory)
-//   for (const file of files) {
-//     if (file.endsWith('.js')) {
-//       const modulePath = path.join(ipcDirectory, file)
-//       // Importez chaque module IPC dynamiquement
-//       try {
-//         const module = await import(`file://${modulePath}`)
-//         module.default(); // Exécutez la fonction d'enregistrement exportée par défaut
-//       } catch (e) {
-//         console.error(`Échec du chargement du module IPC ${file}:`, e)
+// const isDevelopment = process.env.NODE_ENV !== 'production'
+
+googleAuthIpc.setup()
+sheetsIpc.setup()
+sourcesIpc.setup()
+
+// async function loadIpcHandlers() {
+//   const directory = isDevelopment
+//     ? path.join(process.cwd(), 'src', 'main', 'ipc')
+//     : path.join(app.getAppPath(), 'build', 'main', 'ipc')
+//
+//   try {
+//     const files = fs.readdirSync(directory)
+//     for (const file of files) {
+//       if (file.endsWith('.js')) {
+//         // Convertissez le chemin du fichier en URL appropriée pour l'importation dynamique
+//         const filePath = path.resolve(directory, file) // Obtenez le chemin absolu
+//         const fileUrl = new URL(`file://${filePath}`).href // Convertissez-le en URL de fichier
+//
+//         await import(fileUrl)
 //       }
 //     }
+//   } catch (e) {
+//     console.error('Failed to load IPC handlers:', e)
 //   }
 // }
-
 function createWindow() {
   ipcMain.handle('getConfig', async (event, key) => {
     return configManager.getConfig(key)
@@ -42,11 +52,12 @@ function createWindow() {
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
-      preload: join(__dirname, '../preload/index.js'),
+      webSecurity: true,
+      preload: path.join(__dirname, '../preload/index.js'),
       sandbox: false
     }
   })
-
+  imagesIpc.setup(mainWindow)
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
   })
@@ -61,7 +72,7 @@ function createWindow() {
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
   } else {
-    mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
+    mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'))
   }
 }
 
@@ -78,7 +89,7 @@ app.whenReady().then(async () => {
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
   })
-  // await loadIpcHandlers();
+  // await loadIpcHandlers()
   createWindow()
 
   app.on('activate', function () {

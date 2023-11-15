@@ -6,14 +6,15 @@ import App from './App.vue'
 import routes from './router'
 
 const router = createRouter({
-    history: createWebHistory(),
-    routes,
+  history: createWebHistory(),
+  routes
 })
+
 
 const mainApp = createApp(App)
 // if (process.env.NODE_ENV === 'development') {
 //     devtools.connect("http://localhost", "8098")
 // }
-mainApp.use(electronPlugin);
+mainApp.use(electronPlugin)
 mainApp.use(router)
 mainApp.mount('#app')
