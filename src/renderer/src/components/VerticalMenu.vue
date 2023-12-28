@@ -25,10 +25,9 @@
 <!--      </el-menu-item-group>-->
       <el-sub-menu index="1-1" @click="$router.push({ name: 'sources'})">
         <template #title><el-icon><Connection /></el-icon>Sources</template>
-        <el-menu-item index="1-1-1">item one</el-menu-item>
       </el-sub-menu>
-      <el-sub-menu index="1-2">
-        <template #title><el-icon><Notification /></el-icon>Destinations</template>
+      <el-sub-menu index="1-2" @click="$router.push({ name: 'workflows'})">
+        <template #title><el-icon><Notification /></el-icon>Workflows</template>
         <el-menu-item index="1-2-1">item one</el-menu-item>
       </el-sub-menu>
     </el-sub-menu>

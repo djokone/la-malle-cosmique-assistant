@@ -7,12 +7,14 @@ import googleAuthIpc from './ipc/googleAuthIpc.js'
 import sheetsIpc from './ipc/sheetsIpc.js'
 import imagesIpc from "./ipc/imagesIpc.js";
 import sourcesIpc from "./ipc/sourcesIpc.js";
+import workflowsIpc from "./ipc/workflowsIpc.js";
 
 // const isDevelopment = process.env.NODE_ENV !== 'production'
 
 googleAuthIpc.setup()
 sheetsIpc.setup()
 sourcesIpc.setup()
+workflowsIpc.setup()
 
 // async function loadIpcHandlers() {
 //   const directory = isDevelopment

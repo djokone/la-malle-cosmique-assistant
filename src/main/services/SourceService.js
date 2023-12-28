@@ -7,6 +7,7 @@ const addSource = (source) => {
   store.set('sources', sources)
 }
 const removeSource = (source) => {
+  console.log(source)
   const sources = store.get('sources')
   const newSources = sources.filter((s) => s.id !== source.id)
   store.set('sources', newSources)

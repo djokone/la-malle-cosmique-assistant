@@ -92,12 +92,16 @@ export default {
     this.fetchSheets()
   },
   methods: {
+    deleteSource () {
+      // console.log('')
+      this.$electron.ipcRenderer.invoke('removeSource', JSON.parse(JSON.stringify(this.source)))
+      this.$router.push({name: 'sources'})
+    },
     async loadSource(id) {
       try {
         console.log('load source')
         console.log(id)
         const source = await this.$electron.ipcRenderer.invoke('getSource', id)
-        console.log(source)
         this.source = {...this.source, ...source}
       } catch (error) {
         console.error('Error fetching source:', error)
@@ -225,6 +229,7 @@ export default {
         </el-form-item>
       </div>
       <el-button @click="save">Ajouter</el-button>
+      <el-button v-if="$route.params.id" @click="deleteSource">Supprimer</el-button>
     </el-form>
   </div>
 </template>
