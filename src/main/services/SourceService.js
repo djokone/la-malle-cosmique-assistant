@@ -1,6 +1,26 @@
 import Store from 'electron-store'
 const store = new Store()
 
+const sourceTypes = [
+  ]
+
+const addOrSetSourceTypes = (sourceTypes) => {
+  const sources = sourceTypes
+  if (!sourceTypes.id) {
+    throw new Error('sourceTypes must have an id')
+  }
+  const sourceIndex = sources.findIndex((s) => s.id === sourceTypes.id)
+  if (sourceIndex === -1) {
+    sources.push(sourceTypes)
+  } else {
+    sources[sourceIndex] = sourceTypes
+  }
+}
+
+const getSourceTypes = () => {
+  return sourceTypes
+}
+
 const addSource = (source) => {
   const sources = store.get('sources') ?? []
   sources.push(source)

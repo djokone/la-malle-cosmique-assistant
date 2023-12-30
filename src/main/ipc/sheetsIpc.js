@@ -1,9 +1,89 @@
 import { ipcMain } from 'electron'
 import configManager from '../configManager.js'
 import { google } from 'googleapis'
+import SourceService from '../services/SourceService.js'
 
 export default {
   setup: () => {
+    SourceService.addOrSetSource({
+      id: 'google-sheets',
+      name: 'Google Sheets',
+      description: 'Source de données Google Sheets',
+      params: [
+        {
+          name: 'spreadsheetId',
+          label: 'Identifiant du document',
+          type: 'string',
+          required: false
+        },
+        {
+          name: 'range',
+          label: 'Plage de cellules',
+          type: 'string',
+          required: false
+        }
+      ]
+    })
+    ipcMain.handle('source-settings', async () => {
+      return [
+        {
+          name: 'google-sheets',
+          label: 'Google Sheets',
+          description: 'Source de données Google Sheets',
+          params: [
+            {
+              name: 'spreadsheetId',
+              label: 'Identifiant du document',
+              type: 'string',
+              required: false
+            },
+            {
+              name: 'range',
+              label: 'Plage de cellules',
+              type: 'string',
+              required: false
+            }
+          ]
+        }
+      ]
+    })
+    ipcMain.handle('workflow-actions', async () => {
+      return [
+        {
+          name: 'load-google-sheet-document',
+          label: 'Charger un document',
+          description: 'Charge un document Google Sheet',
+          params: [
+            {
+              name: 'spreadsheetId',
+              label: 'Identifiant du document',
+              type: 'text',
+              required: true
+            }
+          ]
+        },
+        {
+          name: 'load-google-sheet',
+          label: 'Charger une feuille de document',
+          description: 'Charge une feuille de document Google Sheet',
+          params: [
+            {
+              name: 'spreadsheetId',
+              label: 'Identifiant du document',
+              type: 'text',
+              required: true
+            },
+            {
+              name: 'range',
+              label: 'Plage de cellules',
+              type: 'text',
+              required: true
+            }
+          ]
+        }
+      ]
+    })
+
     ipcMain.handle('load-google-sheet-document', async (event, { spreadsheetId }) => {
       try {
         const tokens = configManager.getConfig('googleAuthToken') // Assurez-vous que les tokens sont stockés au préalable

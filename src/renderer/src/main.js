@@ -1,4 +1,5 @@
 import { createApp } from 'vue'
+// import devtools from '@vue/devtools'
 import electronPlugin from './plugins/electron.js'
 import { createRouter, createWebHistory } from 'vue-router'
 import './style.scss'
@@ -13,7 +14,7 @@ const router = createRouter({
 
 const mainApp = createApp(App)
 // if (process.env.NODE_ENV === 'development') {
-//     devtools.connect("http://localhost", "8098")
+//     devtools.connect()
 // }
 mainApp.use(electronPlugin)
 mainApp.use(router)

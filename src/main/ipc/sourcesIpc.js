@@ -3,6 +3,11 @@ import SourceService from '../services/SourceService.js'
 
 export default {
   setup() {
+    ipcMain.handle('getSourceTypes', async () => {
+      return [
+
+      ]
+    })
     ipcMain.handle('getSource', async (event, key) => {
       console.log('getSource', key)
       console.log('getSource', SourceService.getSource(key))

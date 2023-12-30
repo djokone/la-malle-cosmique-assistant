@@ -45,6 +45,16 @@ export default {
         { value: 'images-folder', label: "Dossier d'images" }
       ]
     },
+    currentFormComponent() {
+      switch (this.source.source_type) {
+        case 'images-folder':
+          return ImagesFolderForm;
+        case 'google-sheet':
+          return GoogleSheetForm;
+        default:
+          return null;
+      }
+    },
     title() {
       return this.source && this.source.id ? 'Modifier' : 'Ajouter une source'
     }
@@ -102,7 +112,7 @@ export default {
         console.log('load source')
         console.log(id)
         const source = await this.$electron.ipcRenderer.invoke('getSource', id)
-        this.source = {...this.source, ...source}
+        this.source = { ...this.source, ...source }
       } catch (error) {
         console.error('Error fetching source:', error)
       }
