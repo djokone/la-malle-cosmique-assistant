@@ -38,7 +38,7 @@ export default {
       directoryMap[key] = directoryPath
     }
 
-    SourceService.addOrSetSource({
+    SourceService.addOrSetSourceTypes({
       id: 'images',
       name: 'Images',
       description: 'Source de données images',

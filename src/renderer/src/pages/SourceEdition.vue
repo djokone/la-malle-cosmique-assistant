@@ -4,10 +4,12 @@ export default {
   beforeRouteEnter(to, from, next) {
     next(async (vm) => {
       await vm.loadSource()
+      await vm.loadSourceTypes()
     })
   },
   data() {
     return {
+      sourceTypes: [],
       documents: [],
       imageFiles: [],
       sheets: [],
@@ -39,22 +41,22 @@ export default {
         }
       })
     },
-    sourceTypes() {
-      return [
-        { value: 'google-sheet', label: 'Google sheets' },
-        { value: 'images-folder', label: "Dossier d'images" }
-      ]
-    },
-    currentFormComponent() {
-      switch (this.source.source_type) {
-        case 'images-folder':
-          return ImagesFolderForm;
-        case 'google-sheet':
-          return GoogleSheetForm;
-        default:
-          return null;
-      }
-    },
+    // sourceTypes() {
+    //   return [
+    //     { value: 'google-sheet', label: 'Google sheets' },
+    //     { value: 'images-folder', label: "Dossier d'images" }
+    //   ]
+    // },
+    // currentFormComponent() {
+    //   switch (this.source.source_type) {
+    //     case 'images-folder':
+    //       return ImagesFolderForm;
+    //     case 'google-sheet':
+    //       return GoogleSheetForm;
+    //     default:
+    //       return null;
+    //   }
+    // },
     title() {
       return this.source && this.source.id ? 'Modifier' : 'Ajouter une source'
     }
@@ -113,6 +115,15 @@ export default {
         console.log(id)
         const source = await this.$electron.ipcRenderer.invoke('getSource', id)
         this.source = { ...this.source, ...source }
+      } catch (error) {
+        console.error('Error fetching source:', error)
+      }
+    },
+    async loadSourceTypes() {
+      try {
+        const sourceTypes = await this.$electron.ipcRenderer.invoke('getSourceTypes')
+        console.log(sourceTypes)
+        this.sourceTypes = { ...this.sourceTypes, ...sourceTypes }
       } catch (error) {
         console.error('Error fetching source:', error)
       }
@@ -195,9 +206,9 @@ export default {
         <el-select v-model="source.source_type" placeholder="Type de source">
           <el-option
             v-for="item in sourceTypes"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
           >
           </el-option>
         </el-select>

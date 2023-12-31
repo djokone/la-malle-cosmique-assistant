@@ -5,7 +5,8 @@ import SourceService from '../services/SourceService.js'
 
 export default {
   setup: () => {
-    SourceService.addOrSetSource({
+    console.log('setup sheets')
+    SourceService.addOrSetSourceTypes({
       id: 'google-sheets',
       name: 'Google Sheets',
       description: 'Source de données Google Sheets',
@@ -137,5 +138,6 @@ export default {
         throw error // Renvoyer l'erreur au processus de rendu
       }
     })
+
   }
 }
